@@ -1,0 +1,13 @@
+---
+title: "SDGene i norsk bistand 2020 - kombinasjonsoversikt"
+output:
+  html_document: default
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+
+```
+
+![](output/sdg_1.png){width=75%} ![](output/sdg_2.png){width=75%} ![](output/sdg_3.png){width=75%} ![](output/sdg_4.png){width=75%} ![](output/sdg_5.png){width=75%} ![](output/sdg_6.png){width=75%} ![](output/sdg_7.png){width=75%} ![](output/sdg_8.png){width=75%} ![](output/sdg_9.png){width=75%} ![](output/sdg_10.png){width=75%} ![](output/sdg_11.png){width=75%} ![](output/sdg_12.png){width=75%} ![](output/sdg_13.png){width=75%} ![](output/sdg_14.png){width=75%} ![](output/sdg_15.png){width=75%} ![](output/sdg_16.png){width=75%} ![](output/sdg_17.png){width=75%}
