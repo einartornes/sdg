@@ -12,15 +12,15 @@ library(stringr)
 library(writexl)
 
 # Noradstats-package: install from github
-library(devtools)
-install_github("einartornes/noradstats")
+#library(devtools)
+#install_github("einartornes/noradstats")
 library(noradstats)
 
 # Find available aid datasets from noradstats google drive
-noradstats::find_aiddata()
+#noradstats::find_aiddata()
 
 # Choose dataset to download. Save in subdirectory (/data)
-noradstats::download_aiddata("oda_ten.csv", subdir = TRUE)
+#noradstats::download_aiddata("oda_ten.csv", subdir = TRUE)
 
 # Read aid data
 df_orig <- noradstats::read_aiddata("data/oda_ten.csv")
@@ -108,6 +108,10 @@ df_goal_target <- left_join(x = df_goal, y = df_target,  by = "agreement_number"
 # Include columns in original data frame and save
 df_orig_new <- left_join(x = df_orig, y = df_goal_target,  by = "agreement_number")
 
-# Save dataset as xlsx file
-# Create an "output" folder manually and then run last line of code
-writexl::write_xlsx(df_orig_new, path = "output/sdg_dataset.xlsx")
+# Save dataset as xlsx file in subfolder "./output". Create folder if not present.
+if(file.exists("./output") == TRUE) {
+  writexl::write_xlsx(df_orig_new, path = "output/sdg_dataset.xlsx")
+} else {
+  dir.create(file.path("./output"))
+  writexl::write_xlsx(df_orig_new, path = "output/sdg_dataset.xlsx")
+}
