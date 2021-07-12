@@ -7,19 +7,25 @@
 # Loading packages and relevant data --------------------------------------
 library(dplyr)
 library(tidyr)
-library(noradstats)
 library(janitor)
 library(stringr)
 library(writexl)
 
-# Find and download aid data from noradstats google drive
-# noradstats::find_aiddata()
-# noradstats::download_aiddata("oda_ten.csv", subdir = TRUE)
+# Noradstats-package: install from github
+library(devtools)
+install_github("einartornes/noradstats")
+library(noradstats)
+
+# Find available aid datasets from noradstats google drive
+noradstats::find_aiddata()
+
+# Choose dataset to download. Save in subdirectory (/data)
+noradstats::download_aiddata("oda_ten.csv", subdir = TRUE)
 
 # Read aid data
 df_orig <- noradstats::read_aiddata("data/oda_ten.csv")
 
-# Clean column names
+# Make clean column names
 df_orig <- janitor::clean_names(df_orig)
 
 # Last year only
@@ -103,4 +109,5 @@ df_goal_target <- left_join(x = df_goal, y = df_target,  by = "agreement_number"
 df_orig_new <- left_join(x = df_orig, y = df_goal_target,  by = "agreement_number")
 
 # Save dataset as xlsx file
+# Create an "output" folder manually and then run last line of code
 writexl::write_xlsx(df_orig_new, path = "output/sdg_dataset.xlsx")
