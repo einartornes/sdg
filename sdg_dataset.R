@@ -1,4 +1,4 @@
-# Script to add useful SDG columns to the orginal statsys dataframe
+# Script to create a one year statsys dataset inlcuding multilple SDG columns
 # Procedure:
 # A (simple step): Add sdg_main_goal_code and sdg_main_target_code to statsys data frame
 # B (complex step): Add columns for all SDG-goals and SDG-targets to statsys data frame
