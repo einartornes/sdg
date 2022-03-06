@@ -267,6 +267,65 @@ df_orig_new <- df_orig_new %>%
   mutate(sdg_17_main_rel = fct_relevel(sdg_17_main_rel, "Main", "Relevant", "Not relevant"))
 
 
+
+# Sorting columns for each sdg_col_main_rel
+
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_1_main_rel_sort = case_when(sdg_1_main_rel == "Main" ~ 1,
+                                         sdg_1_main_rel == "Relevant" ~ 2,
+                                         sdg_1_main_rel == "Not relevant" ~ 3)) %>%
+  mutate(sdg_2_main_rel_sort = case_when(sdg_2_main_rel == "Main" ~ 1,
+                                         sdg_2_main_rel == "Relevant" ~ 2,
+                                         sdg_2_main_rel == "Not relevant" ~ 3)) %>%
+  mutate(sdg_3_main_rel_sort = case_when(sdg_3_main_rel == "Main" ~ 1,
+                                         sdg_3_main_rel == "Relevant" ~ 2,
+                                         sdg_3_main_rel == "Not relevant" ~ 3)) %>%
+  mutate(sdg_4_main_rel_sort = case_when(sdg_4_main_rel == "Main" ~ 1,
+                                         sdg_4_main_rel == "Relevant" ~ 2,
+                                         sdg_4_main_rel == "Not relevant" ~ 3)) %>%
+  mutate(sdg_5_main_rel_sort = case_when(sdg_5_main_rel == "Main" ~ 1,
+                                         sdg_5_main_rel == "Relevant" ~ 2,
+                                         sdg_5_main_rel == "Not relevant" ~ 3)) %>%
+  mutate(sdg_6_main_rel_sort = case_when(sdg_6_main_rel == "Main" ~ 1,
+                                         sdg_6_main_rel == "Relevant" ~ 2,
+                                         sdg_6_main_rel == "Not relevant" ~ 3)) %>%
+  mutate(sdg_7_main_rel_sort = case_when(sdg_7_main_rel == "Main" ~ 1,
+                                         sdg_7_main_rel == "Relevant" ~ 2,
+                                         sdg_7_main_rel == "Not relevant" ~ 3)) %>%
+  mutate(sdg_8_main_rel_sort = case_when(sdg_8_main_rel == "Main" ~ 1,
+                                         sdg_8_main_rel == "Relevant" ~ 2,
+                                         sdg_8_main_rel == "Not relevant" ~ 3)) %>%
+  mutate(sdg_9_main_rel_sort = case_when(sdg_9_main_rel == "Main" ~ 1,
+                                         sdg_9_main_rel == "Relevant" ~ 2,
+                                         sdg_9_main_rel == "Not relevant" ~ 3)) %>%
+  mutate(sdg_10_main_rel_sort = case_when(sdg_10_main_rel == "Main" ~ 1,
+                                          sdg_10_main_rel == "Relevant" ~ 2,
+                                          sdg_10_main_rel == "Not relevant" ~ 3)) %>%
+  mutate(sdg_11_main_rel_sort = case_when(sdg_11_main_rel == "Main" ~ 1,
+                                          sdg_11_main_rel == "Relevant" ~ 2,
+                                          sdg_11_main_rel == "Not relevant" ~ 3)) %>%
+  mutate(sdg_12_main_rel_sort = case_when(sdg_12_main_rel == "Main" ~ 1,
+                                          sdg_12_main_rel == "Relevant" ~ 2,
+                                          sdg_12_main_rel == "Not relevant" ~ 3)) %>%
+  mutate(sdg_13_main_rel_sort = case_when(sdg_13_main_rel == "Main" ~ 1,
+                                          sdg_13_main_rel == "Relevant" ~ 2,
+                                          sdg_13_main_rel == "Not relevant" ~ 3)) %>%
+  mutate(sdg_14_main_rel_sort = case_when(sdg_14_main_rel == "Main" ~ 1,
+                                          sdg_14_main_rel == "Relevant" ~ 2,
+                                          sdg_14_main_rel == "Not relevant" ~ 3)) %>%
+  mutate(sdg_15_main_rel_sort = case_when(sdg_15_main_rel == "Main" ~ 1,
+                                          sdg_15_main_rel == "Relevant" ~ 2,
+                                          sdg_15_main_rel == "Not relevant" ~ 3)) %>%
+  mutate(sdg_16_main_rel_sort = case_when(sdg_16_main_rel == "Main" ~ 1,
+                                          sdg_16_main_rel == "Relevant" ~ 2,
+                                          sdg_16_main_rel == "Not relevant" ~ 3)) %>%
+  mutate(sdg_17_main_rel_sort = case_when(sdg_17_main_rel == "Main" ~ 1,
+                                          sdg_17_main_rel == "Relevant" ~ 2,
+                                          sdg_17_main_rel == "Not relevant" ~ 3))
+
+
+
+
 # Save dataset as xlsx file in subfolder "./output". Create folder if not present.
 if(file.exists("./output") == TRUE) {
   writexl::write_xlsx(df_orig_new, path = "output/sdg_dataset.xlsx")
