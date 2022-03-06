@@ -9,6 +9,7 @@ library(dplyr)
 library(tidyr)
 library(janitor)
 library(stringr)
+library(forcats)
 library(writexl)
 
 # Noradstats-package: install from github
@@ -107,6 +108,164 @@ df_goal_target <- left_join(x = df_goal, y = df_target,  by = "agreement_number"
 
 # Include columns in original data frame and save
 df_orig_new <- left_join(x = df_orig, y = df_goal_target,  by = "agreement_number")
+
+
+
+# Main, relevant, not relevant for each 17 SDGs ---------------------------
+
+#SDG 1
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_1_main_rel = case_when(
+    sdg_main_goal_code == 1 ~ "Main",
+    sdg_main_goal_code != 1 & sdg_1 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_1_main_rel = fct_relevel(sdg_1_main_rel, "Main", "Relevant", "Not relevant"))
+
+#SDG 2
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_2_main_rel = case_when(
+    sdg_main_goal_code == 2 ~ "Main",
+    sdg_main_goal_code != 2 & sdg_2 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_2_main_rel = fct_relevel(sdg_2_main_rel, "Main", "Relevant", "Not relevant"))
+
+#SDG 3
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_3_main_rel = case_when(
+    sdg_main_goal_code == 3 ~ "Main",
+    sdg_main_goal_code != 3 & sdg_3 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_3_main_rel = fct_relevel(sdg_3_main_rel, "Main", "Relevant", "Not relevant"))
+
+#SDG 4
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_4_main_rel = case_when(
+    sdg_main_goal_code == 4 ~ "Main",
+    sdg_main_goal_code != 4 & sdg_4 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_4_main_rel = fct_relevel(sdg_4_main_rel, "Main", "Relevant", "Not relevant"))
+
+#SDG 5
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_5_main_rel = case_when(
+    sdg_main_goal_code == 5 ~ "Main",
+    sdg_main_goal_code != 5 & sdg_5 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_5_main_rel = fct_relevel(sdg_5_main_rel, "Main", "Relevant", "Not relevant"))
+
+#SDG 6
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_6_main_rel = case_when(
+    sdg_main_goal_code == 6 ~ "Main",
+    sdg_main_goal_code != 6 & sdg_6 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_6_main_rel = fct_relevel(sdg_6_main_rel, "Main", "Relevant", "Not relevant"))
+
+#SDG 7
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_7_main_rel = case_when(
+    sdg_main_goal_code == 7 ~ "Main",
+    sdg_main_goal_code != 7 & sdg_7 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_7_main_rel = fct_relevel(sdg_7_main_rel, "Main", "Relevant", "Not relevant"))
+
+#SDG 8
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_8_main_rel = case_when(
+    sdg_main_goal_code == 8 ~ "Main",
+    sdg_main_goal_code != 8 & sdg_8 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_8_main_rel = fct_relevel(sdg_8_main_rel, "Main", "Relevant", "Not relevant"))
+
+#SDG 9
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_9_main_rel = case_when(
+    sdg_main_goal_code == 9 ~ "Main",
+    sdg_main_goal_code != 9 & sdg_9 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_9_main_rel = fct_relevel(sdg_9_main_rel, "Main", "Relevant", "Not relevant"))
+
+#SDG 10
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_10_main_rel = case_when(
+    sdg_main_goal_code == 10 ~ "Main",
+    sdg_main_goal_code != 10 & sdg_10 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_10_main_rel = fct_relevel(sdg_10_main_rel, "Main", "Relevant", "Not relevant"))
+
+#SDG 11
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_11_main_rel = case_when(
+    sdg_main_goal_code == 11 ~ "Main",
+    sdg_main_goal_code != 11 & sdg_11 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_11_main_rel = fct_relevel(sdg_11_main_rel, "Main", "Relevant", "Not relevant"))
+
+#SDG 12
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_12_main_rel = case_when(
+    sdg_main_goal_code == 12 ~ "Main",
+    sdg_main_goal_code != 12 & sdg_12 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_12_main_rel = fct_relevel(sdg_12_main_rel, "Main", "Relevant", "Not relevant"))
+
+#SDG 13
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_13_main_rel = case_when(
+    sdg_main_goal_code == 13 ~ "Main",
+    sdg_main_goal_code != 13 & sdg_13 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_13_main_rel = fct_relevel(sdg_13_main_rel, "Main", "Relevant", "Not relevant"))
+
+#SDG 14
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_14_main_rel = case_when(
+    sdg_main_goal_code == 14 ~ "Main",
+    sdg_main_goal_code != 14 & sdg_14 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_14_main_rel = fct_relevel(sdg_14_main_rel, "Main", "Relevant", "Not relevant"))
+
+#SDG 15
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_15_main_rel = case_when(
+    sdg_main_goal_code == 15 ~ "Main",
+    sdg_main_goal_code != 15 & sdg_15 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_15_main_rel = fct_relevel(sdg_15_main_rel, "Main", "Relevant", "Not relevant"))
+
+#SDG 16
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_16_main_rel = case_when(
+    sdg_main_goal_code == 16 ~ "Main",
+    sdg_main_goal_code != 16 & sdg_16 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_16_main_rel = fct_relevel(sdg_16_main_rel, "Main", "Relevant", "Not relevant"))
+
+#SDG 17
+df_orig_new <- df_orig_new %>%
+  mutate(sdg_17_main_rel = case_when(
+    sdg_main_goal_code == 17 ~ "Main",
+    sdg_main_goal_code != 17 & sdg_17 == TRUE ~ "Relevant",
+    TRUE ~ as.character("Not relevant")
+  )) %>%
+  mutate(sdg_17_main_rel = fct_relevel(sdg_17_main_rel, "Main", "Relevant", "Not relevant"))
+
 
 # Save dataset as xlsx file in subfolder "./output". Create folder if not present.
 if(file.exists("./output") == TRUE) {
