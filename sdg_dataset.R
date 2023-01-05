@@ -11,6 +11,7 @@ library(janitor)
 library(stringr)
 library(forcats)
 library(writexl)
+library(here)
 
 # Noradstats-package: install from github
 #library(devtools)
@@ -21,10 +22,10 @@ library(noradstats)
 #noradstats::find_aiddata()
 
 # Choose dataset to download. Save in subdirectory (/data)
-#noradstats::download_aiddata("oda_ten.csv", subdir = TRUE)
+noradstats::get_aiddata("statsys_ten.csv", here("data", "statsys_ten.csv"))
 
 # Read aid data
-df_orig <- noradstats::read_aiddata("data/oda_ten.csv")
+df_orig <- noradstats::read_aiddata("data/statsys_ten.csv")
 
 # Make clean column names
 df_orig <- janitor::clean_names(df_orig)
