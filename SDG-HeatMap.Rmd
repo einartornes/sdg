@@ -1,0 +1,129 @@
+---
+title: "Heatmap"
+date: "2023-03-21"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# The script produces a dataset of the overlap of each SDG main goal and SDG relevant goal. The overlap is measured in disbursements.
+
+
+# Load packages and sdg dataset -------------------------------------------
+
+library(readxl)
+library(writexl)
+library(dplyr)
+library(purrr)
+library(tibble)
+library(ggplot2)
+library(forcats)
+library(plotly)
+library(noradplot)
+library(grid)
+library(png)
+sdg_dataset_2022 <- read_excel("~/sdg_dataset_2022.xlsx")
+df <- sdg_dataset_2022
+
+# Function to reshape the SDG dataset from wide to long ----------------------------
+
+# Objective: For the chosen SDG main goal, return a dataframe of the overlap in disbursement with each SDG relevant goal
+f_sdg <- function(main_goal = NULL) {
+  
+  # Elements to map over: SDG relevant goals
+  cols_rel <- paste0("sdg_", 1:17)
+  
+  # Mapping procedure and return a dataframe
+  table <- map(syms(cols_rel), ~df |>  # rlang syntax
+                    filter(type_of_flow == "ODA") |> 
+                    filter(type_of_agreement != "Rammeavtale") |> 
+                    filter(sdg_main_goal_code == main_goal) |>
+                    filter(!!.x == TRUE) |>  # rlang syntax
+                    summarise(nok_mill = sum(disbursed_mill_nok))) |> 
+    list_rbind()
+  
+  # Add label columns and arrange factor levels
+  table <- table |> 
+    add_column(sdg_main = paste0("sdg_", main_goal),
+               sdg_relevant = cols_rel, .before = TRUE) |> 
+    mutate(sdg_main = factor(sdg_main, levels = paste0("sdg_", 1:17)),
+           sdg_relevant = factor(sdg_relevant, levels = paste0("sdg_", 1:17)))
+  
+  return(table)
+}
+
+# Apply function to each main goal and return as a long dataframe-------------------
+
+df_sdg <- map(1:17, f_sdg) |> 
+  list_rbind()
+
+# Plot -----------------------------------------------------------------------------
+
+```
+
+```{r Eliminating double cells}
+df_sdg <- df_sdg %>% filter(sdg_main != sdg_relevant)
+```
+
+```{r HeatMap}
+
+ggnorad()
+df_sdg2 <- df_sdg
+df_sdg2 <- df_sdg2%>%
+  group_by(sdg_main) %>%
+  mutate(fill_prop_unit = nok_mill / sum(nok_mill)*100)
+df_sdg2 <- df_sdg2 |> 
+  mutate(fill_prop_unit = ifelse(fill_prop_unit==0, NA, fill_prop_unit))
+```
+
+```{r}
+img_path <- "~/sdg/SDG-PNGs/Color"
+img_files <- img_files <- character(17)
+for (i in 1:17) {
+  img_files[i] <- paste0(img_path, "/", i, ".png")
+}
+imgs <- lapply(img_files, readPNG)
+img_grobs <- lapply(imgs, function(img) rasterGrob(img, interpolate = TRUE, height = unit(0.1, "npc"), width = unit(0.1, "npc")))
+
+# create the ggplot
+SDG <- ggplot(df_sdg2, aes(x = sdg_main, y = sdg_relevant, fill = fill_prop_unit)) + 
+  geom_tile() + scale_fill_norad_c(na.value = "black") + 
+  labs(title = "SDG Heatmap", x = "Hoved Mål", y = "Relevant Mål", fill = "Prosent") + 
+  scale_y_discrete(expand = c(0.1,0)) +
+  scale_x_discrete(expand = c(0.1,0)) +
+  coord_fixed(ratio=1) +
+  theme(axis.text.x = element_blank(),
+        axis.title.x = element_text (size = 20),
+        axis.ticks.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.y = element_text (size = 20),
+        axis.ticks.y = element_blank(),
+        axis.line.x = element_blank (),
+        axis.line.y = element_blank())
+
+# add images to the plot
+for (i in seq_along(img_files)) {
+  img_grob <- img_grobs[[i]] # get the corresponding image
+  SDG <- SDG +
+    annotation_custom(img_grob, 
+                      xmin = i + -5.075, xmax = i + 5.071, 
+                      ymin = -5.1, ymax = 5.1) # adjust the coordinates to place the image within the plot area
+}
+for (i in seq_along(img_files)) {
+  img_grob <- img_grobs[[i]] # get the corresponding image
+  SDG <- SDG +
+    annotation_custom(img_grob, 
+                      xmin = -5.075, xmax = 5.071, 
+                      ymin = i + -5.1, ymax = i + 5.1) # adjust the coordinates to place the image within the plot area
+}
+ggsave("heatmap.png", plot = SDG, dpi = 1000)
+```
+
+```{r}
+print(SDG)
+```
+
+
+
