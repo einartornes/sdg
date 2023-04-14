@@ -23,7 +23,7 @@ library(forcats)
 library(noradplot)
 library(grid)
 library(png)
-df <- read_excel("~/sdg/sdg_dataset_2022.xlsx")
+df <- read_excel("output/sdg_dataset.xlsx")
 
 # Function to reshape the SDG dataset from wide to long ----------------------------
 
@@ -89,8 +89,9 @@ img_grobs <- lapply(imgs, function(img) rasterGrob(img, interpolate = TRUE, heig
 
 ```{r Heatmap construction for display in R}
 # create the ggplot
+
 ggnorad()
-SDG_print <- ggplot(df_sdg2, aes(x = sdg_main, y = sdg_relevant, fill = fill_prop_unit)) +
+SDG_print <- ggplot(df_sdg, aes(x = sdg_main, y = sdg_relevant, fill = fill_prop_unit)) +
  geom_tile() + scale_fill_norad_c(na.value = "black") +
  labs(title = "Prosentvis fordeling av norsk bistand per SDG", x = "Hovedmål", y = "Relevant Mål", fill = "Prosent") +
  scale_y_discrete(expand = c(0.1,0)) +

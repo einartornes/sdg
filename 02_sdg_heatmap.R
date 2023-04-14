@@ -45,4 +45,8 @@ f_sdg <- function(main_goal = NULL) {
 df_sdg <- map(0:17, f_sdg) |> 
   list_rbind()
 
+# Explaination: the map call above is a short version of this:
+# df_sdg <- map(.x = 0:17, .f = ~f_sdg(.x)) |> 
+#   list_rbind()
+
 # Plot -----------------------------------------------------------------------------

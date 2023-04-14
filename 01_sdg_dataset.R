@@ -21,11 +21,13 @@ library(noradstats)
 # Find available aid datasets from noradstats google drive
 #noradstats::find_aiddata()
 
+dir.create(here("data"))
+
 # Choose dataset to download. Save in subdirectory (/data)
-noradstats::get_aiddata("statsys_ten.csv", here("data", "statsys_ten.csv"))
+# noradstats::get_aiddata("statsys_ten.csv", here("data", "statsys_ten.csv"))
 
 # Read aid data
-df_orig <- noradstats::read_aiddata("data/statsys_ten.csv")
+df_orig <- noradstats::read_aiddata(here("data", "statsys_ten.csv"))
 
 # Make clean column names
 df_orig <- janitor::clean_names(df_orig)
@@ -110,8 +112,25 @@ df_goal_target <- left_join(x = df_goal, y = df_target,  by = "agreement_number"
 # Include columns in original data frame and save
 df_orig_new <- left_join(x = df_orig, y = df_goal_target,  by = "agreement_number")
 
+####################################################
+# Function to make SDG column
+fun_sdg <- function(data = NULL, new_var_name = NULL, var_sdg = NULL) {
+  
+  data |> 
+    mutate(!! quo_name(new_var_name) := case_when(
+      sdg_main_goal_code == 1 ~ "Main",
+      sdg_main_goal_code != 1 & {{ var_sdg }} == TRUE ~ "Relevant",
+      TRUE ~ as.character("Not relevant") 
+    ))
+}
 
 
+# Make SDG 
+df_new <- fun_sdg(data = df_orig_new, var_sdg = sdg_1, new_var_name = "sdg_1_main_rel")
+
+# I struggle to rearrange factor levels.
+
+######################################
 # Main, relevant, not relevant for each 17 SDGs ---------------------------
 
 #SDG 1
