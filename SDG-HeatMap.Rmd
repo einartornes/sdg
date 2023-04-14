@@ -20,12 +20,10 @@ library(purrr)
 library(tibble)
 library(ggplot2)
 library(forcats)
-library(plotly)
 library(noradplot)
 library(grid)
 library(png)
-sdg_dataset_2022 <- read_excel("~/sdg_dataset_2022.xlsx")
-df <- sdg_dataset_2022
+df <- read_excel("~/sdg/sdg_dataset_2022.xlsx")
 
 # Function to reshape the SDG dataset from wide to long ----------------------------
 
@@ -67,18 +65,18 @@ df_sdg <- map(1:17, f_sdg) |>
 df_sdg <- df_sdg %>% filter(sdg_main != sdg_relevant)
 ```
 
-```{r HeatMap}
-
-ggnorad()
-df_sdg2 <- df_sdg
-df_sdg2 <- df_sdg2%>%
+```{r Creating a column for percentage distribution}
+df_sdg <- df_sdg%>%
   group_by(sdg_main) %>%
   mutate(fill_prop_unit = nok_mill / sum(nok_mill)*100)
-df_sdg2 <- df_sdg2 |> 
+```
+
+```{r Standardizing 0 and NA values}
+df_sdg <- df_sdg |> 
   mutate(fill_prop_unit = ifelse(fill_prop_unit==0, NA, fill_prop_unit))
 ```
 
-```{r}
+```{r Adding images}
 img_path <- "~/sdg/SDG-PNGs/Color"
 img_files <- img_files <- character(17)
 for (i in 1:17) {
@@ -87,43 +85,97 @@ for (i in 1:17) {
 imgs <- lapply(img_files, readPNG)
 img_grobs <- lapply(imgs, function(img) rasterGrob(img, interpolate = TRUE, height = unit(0.1, "npc"), width = unit(0.1, "npc")))
 
+```
+
+```{r Heatmap construction for display in R}
 # create the ggplot
-SDG <- ggplot(df_sdg2, aes(x = sdg_main, y = sdg_relevant, fill = fill_prop_unit)) + 
-  geom_tile() + scale_fill_norad_c(na.value = "black") + 
-  labs(title = "SDG Heatmap", x = "Hoved Mål", y = "Relevant Mål", fill = "Prosent") + 
-  scale_y_discrete(expand = c(0.1,0)) +
-  scale_x_discrete(expand = c(0.1,0)) +
-  coord_fixed(ratio=1) +
-  theme(axis.text.x = element_blank(),
-        axis.title.x = element_text (size = 20),
-        axis.ticks.x = element_blank(),
-        axis.text.y = element_blank(),
-        axis.title.y = element_text (size = 20),
-        axis.ticks.y = element_blank(),
-        axis.line.x = element_blank (),
-        axis.line.y = element_blank())
+ggnorad()
+SDG_print <- ggplot(df_sdg2, aes(x = sdg_main, y = sdg_relevant, fill = fill_prop_unit)) +
+ geom_tile() + scale_fill_norad_c(na.value = "black") +
+ labs(title = "Prosentvis fordeling av norsk bistand per SDG", x = "Hovedmål", y = "Relevant Mål", fill = "Prosent") +
+ scale_y_discrete(expand = c(0.1,0)) +
+ scale_x_discrete(expand = c(0.1,0)) +
+ coord_fixed(ratio=1) +
+ theme(axis.text.x = element_blank(),
+  axis.title.x = element_text (size = 10),
+  axis.ticks.x = element_blank(),
+  axis.text.y = element_blank(),
+  axis.title.y = element_text (size = 10),
+  axis.ticks.y = element_blank(),
+  axis.line.x = element_blank (),
+  axis.line.y = element_blank(),
+  legend.text = element_text(size=10),
+  plot.title = element_text(size = 14),
+  legend.title = element_blank())
+
+
 
 # add images to the plot
 for (i in seq_along(img_files)) {
   img_grob <- img_grobs[[i]] # get the corresponding image
-  SDG <- SDG +
+  SDG_print <- SDG_print +
     annotation_custom(img_grob, 
-                      xmin = i + -5.075, xmax = i + 5.071, 
-                      ymin = -5.1, ymax = 5.1) # adjust the coordinates to place the image within the plot area
+                      xmin = i + -5, xmax = i + 5, 
+                      ymin = -5, ymax = 5) # adjust the coordinates to place the image within the plot area
 }
 for (i in seq_along(img_files)) {
   img_grob <- img_grobs[[i]] # get the corresponding image
-  SDG <- SDG +
+  SDG_print <- SDG_print +
     annotation_custom(img_grob, 
-                      xmin = -5.075, xmax = 5.071, 
-                      ymin = i + -5.1, ymax = i + 5.1) # adjust the coordinates to place the image within the plot area
+                      xmin = -5, xmax = 5, 
+                      ymin = i + -5, ymax = i + 5) # adjust the coordinates to place the image within the plot area
 }
-ggsave("heatmap.png", plot = SDG, dpi = 1000)
+print(SDG_print)
 ```
 
-```{r}
-print(SDG)
+```{r Heatmap construction for PNG download}
+# create the ggplot
+ggnorad()
+SDG_png <- ggplot(df_sdg, aes(x = sdg_main, y = sdg_relevant, fill = fill_prop_unit)) + 
+  geom_tile() + scale_fill_norad_c(na.value = "black") + 
+  labs(title = "Prosentvis fordeling av norsk bistand per SDG", x = "Hovedmål", y = "Relevant mål", fill = "Prosent") + 
+  scale_y_discrete(expand = c(0.093,0)) +
+  scale_x_discrete(expand = c(0.093,0)) +
+  coord_fixed(ratio=1) +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line.x = element_blank (),
+        axis.line.y = element_blank (),
+        axis.title = element_text(size = 140),
+        plot.title = element_text(size = 200),
+        legend.text = element_text(size = 80),
+        legend.title = element_blank())
+
+
+# add images to the plot
+for (i in seq_along(img_files)) {
+  img_grob <- img_grobs[[i]] # get the corresponding image
+  SDG_png <- SDG_png +
+    annotation_custom(img_grob, 
+                      xmin = i + -5, xmax = i + 5, 
+                      ymin = -5, ymax = 5) # adjust the coordinates to place the image within the plot area
+}
+for (i in seq_along(img_files)) {
+  img_grob <- img_grobs[[i]] # get the corresponding image
+  SDG_png <- SDG_png +
+    annotation_custom(img_grob, 
+                      xmin = -5, xmax = 5, 
+                      ymin = i + -5, ymax = i + 5) # adjust the coordinates to place the image within the plot area
+}
 ```
+
+```{r Saving the Heatmap as PNG}
+ggsave("Prosentvis fordeling av millioner NOK per SDG.png", plot = SDG_png, dpi = 1000)
+```
+
+
+
+
+
+
+
 
 
 
