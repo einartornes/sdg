@@ -5,6 +5,7 @@
 # Written by Einar Tornes, 26. March 2021
 
 # Loading packages and relevant data --------------------------------------
+library(readr)
 library(dplyr)
 library(tidyr)
 library(janitor)
@@ -27,7 +28,9 @@ dir.create(here("data"))
 # noradstats::get_aiddata("statsys_ten.csv", here("data", "statsys_ten.csv"))
 
 # Read aid data
-df_orig <- noradstats::read_aiddata(here("data", "statsys_ten.csv"))
+
+df_orig <- read_delim(file = "data/statsys_ten.csv", delim = ",",col_types = readr::cols(`SDG description` = readr::col_character()), 
+                 locale = readr::locale(decimal_mark = ","))
 
 # Make clean column names
 df_orig <- janitor::clean_names(df_orig)
